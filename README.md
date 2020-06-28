@@ -2,9 +2,7 @@ SORT
 =====
 
 A simple online and realtime tracking algorithm for 2D multiple object tracking in video sequences.
-See an example [video here](https://motchallenge.net/movies/ETH-Linthescher-SORT.mp4).
-
-By Alex Bewley  
+Forked from [sort](https://github.com/abewley/sort) by Alex Bewley. And the `modified_sort.py` is to meet the requirements for certain use case, like when tracking people with labels for different pose. In the original repo, the SORT only supports tracking among the same category, and would discard infomation other than `[x1, y1, x2, y2]`. So the main purpose is to keep all the other information throughout the SORT process.
 
 ### Introduction
 
@@ -86,6 +84,7 @@ Using the [MOT challenge devkit](https://motchallenge.net/devkit/) the method pr
 
 Below is the gist of how to instantiate and update SORT. See the ['__main__'](https://github.com/abewley/sort/blob/master/sort.py#L239) section of [sort.py](https://github.com/abewley/sort/blob/master/sort.py#L239) for a complete example.
     
+    # sort.py
     from sort import *
     
     #create instance of SORT
@@ -99,5 +98,22 @@ Below is the gist of how to instantiate and update SORT. See the ['__main__'](ht
 
     # track_bbs_ids is a np array where each row contains a valid bounding box and track_id (last column)
     ...
+    
+    # modified_sort.py
+    from modified_sort import *
+    
+    #create instance of SORT
+    mot_tracker = Sort(len_det=len(detection) + 1)  # detection is something like [x1, x2, y1, y2, conf, cls_conf, cls], then it's 7+1
+    
+    # get detections
+    ...
+    
+    # update SORT
+    track_bbs_ids = mot_tracker.update(detections)
+
+    # track_bbs_ids is a np array where the fifth column is newly added and it's for the tracking id
+    ...
+    
+    
     
  
